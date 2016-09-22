@@ -1,0 +1,63 @@
+@extends('app')
+
+@section('content')
+<div class="container">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="panel panel-primary">
+				<div class="panel-heading">{{trans('employee.update_employee')}}</div>
+
+				<div class="panel-body">
+					{!! Html::ul($errors->all()) !!}
+
+					{!! Form::model($employee, array('route' => array('employees.update', $employee->id), 'method' => 'PUT')) !!}
+					<div class="form-group">
+					{!! Form::label('name', trans('employee.name').' *') !!}
+					{!! Form::text('name', null, array('class' => 'form-control')) !!}
+					</div>
+
+					<div class="form-group">
+					{!! Form::label('email', trans('employee.email').' *') !!}
+					{!! Form::text('email', null, array('class' => 'form-control')) !!}
+					</div>
+
+					<div class="form-group">
+					{!! Form::label('password', trans('employee.password')) !!}
+					<input type="password" class="form-control" name="password" placeholder="Password">
+					</div>
+
+					<div class="form-group">
+					{!! Form::label('password_confirmation', trans('employee.confirm_password')) !!}
+					<input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
+					</div>
+
+                    <div class="form-group">
+                    {!! Form::label('is_admin', 'Is Admin') !!}
+                     {!! Form::select('is_admin', array('0' => 'No', '1' => 'Yes'), null, array('class' => 'form-control')) !!}
+                    </div>
+
+                     <div class="form-group">
+                        {!! Form::label('store_id', 'Stores') !!}
+                        <br/>
+                        <?php 
+                            if ($employee->store_json) {
+                                $store_array = json_decode($employee->store_json, true);
+                            } else {
+                                $store_array = array();
+                            }
+                        ?>
+                        @foreach ($stores as $id => $name)
+                            {!! Form::checkbox('store_id[]', $id, in_array($id, $store_array)) !!}
+                            {!! Form::label('role', $name) !!}<br>
+                        @endforeach
+                    </div>
+
+					{!! Form::submit(trans('employee.submit'), array('class' => 'btn btn-primary')) !!}
+
+					{!! Form::close() !!}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@endsection
